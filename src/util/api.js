@@ -185,7 +185,9 @@ export const apiDeleteWidget = ({ instId }) => {
  * @param {boolean} _params.isdraft - Whether the widget instance is a draft.
  * @param {string} _params.openAt - A datetime string representing the start of the instance's play availability.
  * @param {string} _params.closeAt - A datetime string representing the end of the instance's play availability.
+ * @param {boolean} _params.defer_availability - A boolean representing the Defer to Assignment option for the the instance's play availability.
  * @param {int} _params.attempts - How many play attempts are allowed for the instance.
+ * @param {boolean} _params.defer_attempts - A boolean representing the Defer to Assignment option for the the instance's allowed attempts.
  * @param {boolean} _params.guestAccess - Whether the instance is playable without being logged in.
  * @param {boolean} _params.embeddedOnly - Whether the instance is playable outside of an embedded context.
  * @returns {Promise<any>} - Parsed response data.
@@ -199,7 +201,9 @@ export const apiSaveWidget = (_params) => {
 			is_draft: _params?.isDraft ?? undefined,
 			open_at: _params?.openAt,
 			close_at: _params?.closeAt,
+			defer_availability: _params?.defer_availability,
 			attempts: _params?.attempts ?? undefined,
+			defer_attempts: _params?.defer_attempts,
 			guest_access: _params?.guestAccess ?? undefined,
 			embedded_only: _params?.embeddedOnly ?? undefined,
 		}
@@ -315,7 +319,9 @@ export const apiSetUserInstancePerms = ({ instId, permsObj }) => {
  * @param {boolean} args.isDraft - Whether the widget instance is a draft.
  * @param {string} args.openAt - A datetime string representing the start of the instance's play availability.
  * @param {string} args.closeAt - A datetime string representing the end of the instance's play availability.
+ * @param {boolean} args.deferAvailability - A boolean representing the Defer to Assignment option for the the instance's play availability.
  * @param {int} args.attempts - How many play attempts are allowed for the instance.
+ * @param {boolean} args.deferAttempts - A boolean representing the Defer to Assignment option for the the instance's allowed attempts.
  * @param {boolean} args.guestAccess - Whether the instance is playable without being logged in.
  * @param {boolean} args.embeddedOnly - Whether the instance is playable outside of an embedded context.
  * @returns {Promise<any>} - Parsed response data.
@@ -328,7 +334,9 @@ export const apiUpdateWidgetInstance = ({ args }) => {
 		is_draft: args?.isDraft,
 		open_at: args?.openAt,
 		close_at: args?.closeAt,
+		defer_availability: args?.deferAvailability,
 		attempts: args?.attempts,
+		defer_attempts: args?.deferAttempts,
 		guest_access: args?.guestAccess,
 		embedded_only: args?.embeddedOnly,
 	}
