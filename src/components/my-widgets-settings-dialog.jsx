@@ -455,6 +455,7 @@ const MyWidgetsSettingsDialog = ({ onClose, inst, currentUser, otherUserPerms, o
 			formData={state.formData}
 			setFormData={handlePeriodSelectFormDataChange}/>
 	))
+	// Handlers for changing defer values
 	const handleDeferAttemptsFormDataChange = (val) => {
 		setState({...state, formData: {...state.formData, changes: {...state.formData.changes, deferAttempts: val}}})
 	}
