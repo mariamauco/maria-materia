@@ -22,7 +22,9 @@ const initState = () => {
 				dates: [new Date(), new Date()],
 				times: ['',''],
 				periods: ['',''],
-				access: ''
+				access: '',
+				deferAttempts: false,
+				deferAvailability: false,
 			},
 			errors: {
 				date: [false, false],
@@ -173,6 +175,8 @@ const MyWidgetsSettingsDialog = ({ onClose, inst, currentUser, otherUserPerms, o
 					_availability[1].period
 				],
 				access: access,
+				deferAttempts: inst.defer_attempts,
+				deferAvailability: inst.defer_availability,
 			},
 			errors: {
 				date: [false, false],
@@ -231,7 +235,10 @@ const MyWidgetsSettingsDialog = ({ onClose, inst, currentUser, otherUserPerms, o
 			close_at: openClose[1],
 			attempts: valueToAttempts(state.sliderVal),
 			guest_access: false,
-			embedded_only: false
+			embedded_only: false,
+			defer_attempts: changes.deferAttempts,
+			defer_availability: changes.deferAvailability
+			
 		}
 
 		if (state.formData.changes.access === 'embed') {
@@ -255,8 +262,9 @@ const MyWidgetsSettingsDialog = ({ onClose, inst, currentUser, otherUserPerms, o
 				attempts: form.attempts,
 				guestAccess: form.guest_access,
 				embeddedOnly: form.embedded_only,
+				deferAttempts: form.defer_attempts,
+				deferAvailability: form.defer_availability,
 			}
-
 			mutateWidget.mutate({
 				args: args,
 				successFunc: (updatedInst) => {
@@ -447,6 +455,12 @@ const MyWidgetsSettingsDialog = ({ onClose, inst, currentUser, otherUserPerms, o
 			formData={state.formData}
 			setFormData={handlePeriodSelectFormDataChange}/>
 	))
+	const handleDeferAttemptsFormDataChange = (val) => {
+		setState({...state, formData: {...state.formData, changes: {...state.formData.changes, deferAttempts: val}}})
+	}
+	const handleDeferAvailabilityFormDataChange = (val) => {
+		setState({...state, formData: {...state.formData, changes: {...state.formData.changes, deferAvailability: val}}})
+	}
 
 	const handleGuestModeWarningClose = () => setState({...state, showWarning: false})
 	let guestModeWarningRender = null
@@ -494,8 +508,20 @@ const MyWidgetsSettingsDialog = ({ onClose, inst, currentUser, otherUserPerms, o
 						<h3>Attempts</h3>
 						<AttemptsSlider key='slider-key' inst={inst} parentState={state} setParentState={setState} is_student={currentUser.is_student} currentAttemptsVal={attemptsToValue(inst.attempts)}/>
 					</li>
+					<li className={currentUser.is_student && currentUser.id != inst.user_id ? 'hide' : ''}> 
+						<label htmlFor="defer-attempts">
+							<input type="checkbox" id="defer-attempts" name="terms" checked={state.formData.changes.deferAttempts} onChange={e => handleDeferAttemptsFormDataChange(e.target.checked)}/>
+							Defer attempts to assignment
+						</label>
+					</li>
 					<ul className='to-from'>
 						{ periodSelectElements }
+						<li className={currentUser.is_student && currentUser.id != inst.user_id ? 'hide' : ''}>
+							<label htmlFor="defer-availability">
+								<input type="checkbox" id="defer-availability" name="defer-availability" checked={state.formData.changes.deferAvailability} onChange={e => handleDeferAvailabilityFormDataChange(e.target.checked)}/>
+								Defer availability to assignment
+							</label>
+						</li>
 						<li className='access'>
 							<h3>Access</h3>
 							<ul className={`access-options ${inst.is_embedded ? 'embedded' : ''}`}>
